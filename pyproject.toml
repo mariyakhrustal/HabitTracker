@@ -1,0 +1,29 @@
+[tool.black]
+line-length = 119
+
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.venv
+  | _build
+  | manage\.py
+  | /migrations/
+  | node_modules
+  | media
+  | staticfiles
+  | settings\.py
+)/
+'''
+
+[tool.isort]
+line_length = 119
+
+profile = "black"
+
+skip_glob = [
+    "*/migrations/*",
+    "manage.py",
+    "settings.py"
+]

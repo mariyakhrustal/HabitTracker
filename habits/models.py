@@ -30,6 +30,7 @@ class Habit(models.Model):
         verbose_name="Время на выполнение (в секундах)", help_text="Не должно превышать 120 секунд"
     )
     is_public = models.BooleanField(default=False, verbose_name="Признак публичности")
+    last_reminded = models.DateTimeField(**NULLABLE, verbose_name="Последнее напоминание")
 
     def __str__(self):
         return f"Я буду {self.action} в {self.time} в {self.place}"

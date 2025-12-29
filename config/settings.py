@@ -22,6 +22,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "corsheaders",
+    "users",
+    "habits",
 ]
 
 MIDDLEWARE = [
@@ -97,6 +99,8 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+AUTH_USER_MODEL = "users.User"
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",

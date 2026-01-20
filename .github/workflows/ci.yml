@@ -131,14 +131,12 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             cd ~/myapp
 
-            # Создаем .env файл из секретов GitHub
-            cat << 'INNER_EOF' > .env
-            NAME=${{ secrets.DB_NAME }}
-            USER=${{ secrets.DB_USER }}
-            PASSWORD=${{ secrets.DB_PASSWORD }}
-            HOST=db
-            SECRET_KEY='${{ secrets.SECRET_KEY }}'
-            INNER_EOF
+            echo "NAME=${{ secrets.DB_NAME }}" > .env
+            echo "USER=${{ secrets.DB_USER }}" >> .env
+            echo "PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+            echo "HOST=db" >> .env
+            echo "SECRET_KEY='${{ secrets.SECRET_KEY }}'" >> .env
+            
             docker compose down
             docker compose up -d --build --remove-orphans
           EOF

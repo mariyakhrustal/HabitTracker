@@ -126,7 +126,7 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "mkdir -p ~/myapp"
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "rm -rf ~/myapp/* && mkdir -p ~/myapp"          
           scp -r -o StrictHostKeyChecking=no ./* ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:~/myapp/
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             cd ~/myapp
@@ -138,7 +138,9 @@ jobs:
             PASSWORD=${{ secrets.DB_PASSWORD }}
             HOST=db
             SECRET_KEY='${{ secrets.SECRET_KEY }}'
-            INNER_EOF
+            docker compose pull
             docker compose down
             docker compose up -d --build --remove-orphans
+            echo "Status of containers:"
+            docker ps
           EOF

@@ -112,8 +112,8 @@ jobs:
         run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
 
   deploy:
-    runs-on: ubuntu-latest
     needs: build
+    runs-on: ubuntu-latest
 
     steps:
       - name: Check out code
@@ -126,11 +126,11 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "rm -rf ~/myapp/* && mkdir -p ~/myapp"          
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "mkdir -p ~/myapp"
           scp -r -o StrictHostKeyChecking=no ./* ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:~/myapp/
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             cd ~/myapp
-          
+
             # Создаем .env файл из секретов GitHub
             cat << 'INNER_EOF' > .env
             NAME=${{ secrets.DB_NAME }}
@@ -138,9 +138,7 @@ jobs:
             PASSWORD=${{ secrets.DB_PASSWORD }}
             HOST=db
             SECRET_KEY='${{ secrets.SECRET_KEY }}'
-            docker compose pull
+            INNER_EOF
             docker compose down
             docker compose up -d --build --remove-orphans
-            echo "Status of containers:"
-            docker ps
           EOF
